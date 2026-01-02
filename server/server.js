@@ -127,7 +127,7 @@ const app = express();
 
 // Configure CORS properly
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8080'], // Add your client URLs
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8080', 'https://471-frontend.vercel.app/'], // Add your client URLs
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-user-role']
