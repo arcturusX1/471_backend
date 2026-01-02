@@ -127,10 +127,22 @@ const app = express();
 
 // Configure CORS properly
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8080', 'https://471-frontend.vercel.app/'], // Add your client URLs
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-user-role']
+    origin: (origin, cb) => {
+        const whitelist = [
+            'http://localhost:3000',
+            'http://localhost:5173',
+            'http://localhost:8080',
+            'https://471-frontend.vercel.app'
+        ];
+        // Allow requests with no origin (curl, server-side)
+        if (!origin) return cb(null, true);
+        // Allow explicit whitelist or any vercel preview domain
+        if (whitelist.includes(origin) || origin.endsWith('.vercel.app')) return cb(null, true);
+        cb(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-user-role']
 }));
 
 app.use(express.json());

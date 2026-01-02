@@ -9,8 +9,11 @@ export const registerUser = async (req, res) => {
   const { name, universityId, email, password, roles, department } = req.body;
 
   try {
-    // normalize role
-    const normalizedRole = roles.toLowerCase();
+    // normalize role safely (accept string or array, default to 'student')
+    let role = 'student';
+    if (typeof roles === 'string' && roles.trim() !== '') role = roles;
+    else if (Array.isArray(roles) && roles.length) role = String(roles[0]);
+    const normalizedRole = role.toLowerCase();
 
     const userExists = await User.findOne({ email });
     if (userExists) {
